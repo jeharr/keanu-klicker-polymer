@@ -1,0 +1,23 @@
+{
+  "name": "Keanu_Klicker_Polymer",
+  "version": "0.0.1",
+  "authors": [
+    "Erik Eppel <eceppel@gmail.com>"
+  ],
+  "description": "A sample Polymer app based on an example using Angular directives in a component style",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "iron-ajax": "polymerelements/iron-ajax#~1.0.4",
+    "iron-image": "polymerelements/iron-image#~1.0.2",
+    "paper-button": "polymerelements/paper-button#~1.0.5",
+    "polymer": "Polymer/polymer#^1.0.0"
+  }
+}

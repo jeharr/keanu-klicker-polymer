@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="import" href="lib/polymer/polymer.html">
+  <!-- elements imports -->
+  <link rel="import" href="lib/paper-button/paper-button.html">
+  <link rel="import" href="lib/iron-ajax/iron-ajax.html">
+  <link rel="import" href="lib/iron-image/iron-image.html">
+  <link href='https://fonts.googleapis.com/css?family=Rock+Salt' rel='stylesheet' type='text/css'>
+</head>
+
+<dom-module id="keanu-klicker"> <!-- root of custom element; id="element-name" -->
+  <style>
+  /* css rules for element */
+    :host {
+      font-family: 'Rock Salt', cursive;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+    }
+    iron-image {
+        display: block;
+        height: 20em;
+        margin: 0 auto;
+    }
+    paper-button {
+      border: 1px solid black;
+      font-size: 1em;
+      margin: 1em auto 0;
+      font-family: 'Rock Salt', cursive;
+      background: white;
+      justify-content: center;
+    }
+  </style>
+
+  <template>
+    <!-- local DOM for element -->
+    <iron-ajax
+      auto
+      url="https://api.gettyimages.com/v3/search/images?fields=id,title,thumb,referral_destinations&sort_order=best&phrase=kittens"
+      headers='{ "Api-Key": "YOUR_KEY_HERE" }'
+      handle-as="json"
+      on-response="logResponse"
+    ></iron-ajax>
+    <h1>Keanu Klicker</h1>
+    <iron-image preload src="{{ keanuUri }}"></iron-image>
+    <paper-button raised>Klick for Keanus</paper-button>
+  </template>
+  
+  <script>
+  // Polymer({}) is where the bulk of element's logic goes; `is` registers element as Polymer element
+    Polymer({
+      is: "keanu-klicker",
+      attached: function() {
+        this.whoa.controls = false;
+        this.whoa.autoplay = true;
+        this.whoa.loop = false;
+      },
+      listeners: {
+        'click': 'clickHandler'
+      },
+      properties: {
+        keanusObj: {
+          type: Object,
+          value: {}
+        },
+        keanuUri: {
+          type: String,
+          notify: true,
+          value: ''
+        },
+        keanuKounter: {
+          type: Number,
+          value: 0
+        },
+        whoa: {
+          type: Object,
+          value: new Audio()
+        }
+      },
+      logResponse: function(response) {
+        var response = response.detail.__data__.response.images;
+        // for (var i = 0; i < response.length; i++) {
+        //   this.keanusObj[i] = response[i].display_sizes[0].uri;
+        // }
+        response.forEach(function(image, i) {
+          this.keanusObj[i] = image.display_sizes[0].uri;
+        }, this);
+      },
+      clickHandler: function(e) {
+        this.whoa.src = "http://www.rosswalker.co.uk/movie_sounds/sounds_files_20150201_1096714/bill_and_teds_excellent/whoa.wav";
+        this.keanuUri = this.keanusObj[this.keanuKounter];
+        if (this.keanuKounter > 28) {
+          this.keanuKounter = 0;
+        } else {
+          this.keanuKounter++;
+        }
+      },
+    });
+  </script>
+</dom-module>
